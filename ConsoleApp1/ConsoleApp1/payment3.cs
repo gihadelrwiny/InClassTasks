@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    internal class payment3: Ipayment
+    internal class payment3: Ipayment,Ilogable
     {
         public string GetPaymenttype() => "Payment3 Payment";
+
+        public void log()
+        {
+            Console.WriteLine("paymen3 log");
+        }
+
         public bool ProcessPayment(decimal amount)
         {
             if (amount > 0)

@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    internal class QNB : Ipayment
+    internal class QNB : Ipayment,Ilogable
     {
         public string GetPaymenttype() => "QNB Payment";
 
-
-
+        public void log()
+        {
+            Console.WriteLine("QNB log");
+        }
 
 
         public bool ProcessPayment(decimal amount)

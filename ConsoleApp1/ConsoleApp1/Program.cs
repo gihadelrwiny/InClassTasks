@@ -14,7 +14,10 @@
             foreach (var item in list)
             {
                 account.Deposit(100, item);
+                
+                Console.WriteLine("-----------------");
             }
+
 
         } 
     }

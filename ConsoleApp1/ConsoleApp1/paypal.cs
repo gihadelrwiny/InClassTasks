@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    internal class paypal: Ipayment
+    internal class paypal: Ipayment, Ilogable
     {
         public string GetPaymenttype() => "Paypal Payment";
+
+        public void log()
+        {
+            Console.WriteLine("paypal log");
+        }
 
         public bool ProcessPayment(decimal amount)
         {
