@@ -4,7 +4,18 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-        }
+            List<Ipayment> list = new List<Ipayment>()
+           {
+                new QNB(),
+                new paypal(),
+                new payment3()
+              };
+            BankAcoount account = new BankAcoount();
+            foreach (var item in list)
+            {
+                account.Deposit(100, item);
+            }
+
+        } 
     }
 }
