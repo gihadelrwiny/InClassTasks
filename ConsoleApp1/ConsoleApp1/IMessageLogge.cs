@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    internal interface Ipayment
+    internal interface IMessageLogge
     {
-        bool ProcessPayment(decimal amount);
-        string GetPaymenttype();
+        void log(string message);   
     }
 }

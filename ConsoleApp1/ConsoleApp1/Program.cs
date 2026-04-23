@@ -4,18 +4,21 @@
     {
         static void Main(string[] args)
         {
-            List<Ipayment> list = new List<Ipayment>()
-           {
-                new QNB(),
-                new paypal(),
-                new payment3()
-              };
-            BankAcoount account = new BankAcoount();
-            foreach (var item in list)
+            var NotificationChanell = new emailClient();
+            var logger = new FileLogger();
+            var notificationService = new NotificationService(NotificationChanell, logger);
+            notificationService.send("Hello from Session 7!");
+            Console.WriteLine("-----------------------------");
+            List<INotificationChanell> notificationChanells = new List<INotificationChanell>
             {
-                account.Deposit(100, item);
+                new emailClient(),
+                new SmsChannel(),
+            };
+            foreach (var chanell in notificationChanells)
+            {
+                chanell.send("Hello from Session 7!");
+                Console.WriteLine("-----------------------------");
             }
-
-        } 
+        }
     }
 }
