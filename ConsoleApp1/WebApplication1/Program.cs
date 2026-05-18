@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
@@ -9,9 +10,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ProductContext>();
+    SeedData.Initialize(context);
 
     var productService = new ProductService(context);
-
+    var orderService = new OrderService(context);
     productService.AddProduct(
         "laptop",
         10.11m,
@@ -20,7 +22,10 @@ using (var scope = app.Services.CreateScope())
     );
     productService.GetAllProducts();
     productService.GetByCategory("aaa");
-    
+    orderService.GetOrderWithDetails();
+     orderService.GetPagedOrder(0, 10);
+     orderService.GetOrderByCustomerCity("Cairo");
+
 
 }
 

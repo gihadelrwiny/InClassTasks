@@ -14,6 +14,8 @@ namespace WebApplication1.Models
 
         public int quantity { get; set; }
         public string Category { get; set; }
+        public List<OrderItems> OrderItems { get; set; }
+           = new List<OrderItems>();
 
         public bool IsDeleted { get; set; } = false;
     }
