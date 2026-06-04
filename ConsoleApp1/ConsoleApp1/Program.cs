@@ -36,7 +36,8 @@
             calc += Divide;
 
             Console.WriteLine("\nMulticast Delegate:");
-            calc(10, 5);
+            Console.WriteLine(calc(10, 5));
+         
             Console.WriteLine("--------------------------------------");
             // Action Logger
             Action<string> logger = message =>
