@@ -26,17 +26,24 @@ namespace WebApplication1.Controllers
                 Temperature = 40
             }
         };
-        [HttpGet("Weather")]
+        [HttpGet()]
         public IActionResult GetAll()
         {
             return Ok(WeatherList);
         }
         [HttpGet("{city}")]
-        public IActionResult GetCity(string city)
+        public IActionResult GetWeatherlistOfCity(string city)
         {
             var cityget = WeatherList.FirstOrDefault(w => w.City.Equals(city, StringComparison.OrdinalIgnoreCase));
             if (cityget is null) return NotFound();
             return Ok(cityget);
+        }
+        [HttpGet("hottest")]
+        public IActionResult GetCityWithHighTemperature()
+        {
+            var HighTemperature = WeatherList.Max(s => s.Temperature);
+            var HighTemperatureCity = WeatherList.Where(s => s.Temperature == HighTemperature);
+            return Ok(HighTemperatureCity);
         }
     }
 }
