@@ -6,7 +6,7 @@ namespace WebApplication1.DTO
     {
         [Required]
         public string Name { get; set; }
-        [Range(10,1000)]
+        [Range(10,15000)]
         public decimal Price { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.DTO;
 using WebApplication1.Models;
@@ -59,9 +60,23 @@ namespace WebApplication1.Controllers
             {
                 Name = dto.Name,
                 Price = dto.Price,
-                Id = products.Max(s => s.Id) + 1,
+                Id = products.Any() ? products.Max(s => s.Id) + 1 : 1
             };
             products.Add(product);
             return CreatedAtAction(nameof(GetById), new { Id = product.Id }, product);
         }
-}}
+        [HttpGet("filter")]
+        public IActionResult GetAll([FromQuery] decimal? minrange, [FromQuery] decimal? maxrange)
+        {
+            var productsfilter = products.AsQueryable();
+
+            if (minrange.HasValue)
+                productsfilter = productsfilter.Where(s => s.Price >= minrange.Value);
+
+            if (maxrange.HasValue)
+                productsfilter = productsfilter.Where(s => s.Price <= maxrange.Value);
+
+            return Ok(productsfilter);
+        }
+    }
+}
