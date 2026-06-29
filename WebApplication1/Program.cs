@@ -1,6 +1,9 @@
 using WebApplication1;
 using WebApplication1.interfaces;
 using WebApplication1.Services;
+using WebApplication1.Shared.Mapping;
+using WebApplication1.Shared.Middleware;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,11 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
+// to handle exception
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,7 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

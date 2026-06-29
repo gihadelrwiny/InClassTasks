@@ -1,10 +1,12 @@
-﻿using WebApplication1.Models;
+﻿using WebApplication1.DTO;
+using WebApplication1.Models;
 
 namespace WebApplication1.interfaces
 {
     public interface IProductService
     {
-        List<Product> GetAll();
-        Product? GetById(int id);
+        List<ProductDto> GetAll();
+        ProductDto GetById(int id);
+        public ProductDto CreateProduct(CreateProductDto dto);
     }
 }

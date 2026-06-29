@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using WebApplication1.DTO;
 using WebApplication1.interfaces;
 
 namespace WebApplication1.Controllers
@@ -33,12 +34,20 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var product = _productService.GetById(id);
-
-            if (product == null)
-                return NotFound();
+            var product = _productService.GetById(id);      
 
             return Ok(product);
         }
+        [HttpPost]
+        public IActionResult CreateProduct(CreateProductDto dto)
+        {
+            var product = _productService.CreateProduct(dto);
+            return CreatedAtAction(
+         nameof(GetById),
+         new { id = product.Id },
+         product);
+        }
+
+            
     }
 }
