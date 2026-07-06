@@ -31,13 +31,14 @@ namespace WebApplication1.Controllers
                 Products = _productService.GetAll()
             });
         }
-
+        [Authorize(Policy = "CanManageProducts")]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var product = _productService.GetById(id);      
+            var product = _productService.GetById(id);
 
             return Ok(product);
+
         }
         [Authorize]
         [HttpPost]

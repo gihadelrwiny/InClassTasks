@@ -1,5 +1,4 @@
-﻿using BCrypt.Net;
-using System.Data;
+﻿using Microsoft.AspNetCore.Identity;
 using WebApplication1.DTO;
 using WebApplication1.interfaces;
 using WebApplication1.Models;
@@ -8,58 +7,62 @@ namespace WebApplication1.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
 
-        // Fake Database
-        private static readonly List<AppUser> _users = new();
-
-        public AuthService(ITokenService tokenService)
+        public AuthService(UserManager<AppUser> userManager, ITokenService tokenService)
         {
+            _userManager = userManager;
             _tokenService = tokenService;
         }
 
-        public Task<AuthResponseDto?> LoginAsync(LoginDto dto)
+        public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
         {
-            var user = _users.FirstOrDefault(x => x.Email == dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
 
             if (user == null)
-                return Task.FromResult<AuthResponseDto?>(null);
+                return null;
 
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                return Task.FromResult<AuthResponseDto?>(null);
+            var validPassword = await _userManager.CheckPasswordAsync(user, dto.Password);
 
-            var roles = new List<string> { user.Role };
+            if (!validPassword)
+                return null;
+
+            var roles = await _userManager.GetRolesAsync(user);
 
             var token = _tokenService.GenerateAccessToken(user, roles);
 
-            var response = new AuthResponseDto
+            return new AuthResponseDto
             {
                 AccessToken = token,
-                UserName = user.UserName,
-                Roles = roles,
+                UserName = user.UserName!,
+                Roles = roles.ToList(),
                 ExpiresAt = DateTime.UtcNow.AddMinutes(30)
             };
-
-            return Task.FromResult<AuthResponseDto?>(response);
         }
 
-        public Task<bool> RegisterAsync(RegisterDto dto)
+        public async Task<bool> RegisterAsync(RegisterDto dto)
         {
-            if (_users.Any(x => x.Email == dto.Email))
-                return Task.FromResult(false);
+            if (await _userManager.FindByEmailAsync(dto.Email) != null)
+                return false;
 
             var user = new AppUser
             {
-                Id = _users.Count + 1,
                 UserName = dto.UserName,
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Role = "User"
+                Email = dto.Email
             };
 
-            _users.Add(user);
+            var result = await _userManager.CreateAsync(user, dto.Password);
 
-            return Task.FromResult(true);
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join(" | ", result.Errors.Select(e => e.Description)));
+            }
+             
+
+            await _userManager.AddToRoleAsync(user, "User");
+
+            return true;
         }
     }
 }

@@ -36,6 +36,7 @@ namespace WebApplication1.Services
             var product = _mapper.Map<Product>(dto);
             product.Id = products.Max(p => p.Id) + 1;
             product.Stock = 0;
+            products.Add(product);
             return _mapper.Map<ProductDto>(product);
         
         }

@@ -1,16 +1,11 @@
-﻿namespace WebApplication1.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace WebApplication1.Models
 {
-    public class AppUser
+    public class AppUser:IdentityUser
     {
-        public int Id { get; set; }
-        public string UserName{ get; set; } = string.Empty;
-        public string Email{ get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-
         public string? RefreshToken { get; set; }
-
         public DateTime? RefreshTokenExpiryTime { get; set; }
-        public string Role { get; set; } = "User";
 
     }
 }
