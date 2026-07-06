@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WebApplication1.DTO;
@@ -38,6 +39,7 @@ namespace WebApplication1.Controllers
 
             return Ok(product);
         }
+        [Authorize]
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto dto)
         {
