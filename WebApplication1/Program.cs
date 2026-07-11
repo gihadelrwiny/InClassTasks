@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 using WebApplication1;
 using WebApplication1.Context;
 using WebApplication1.Extensions;
@@ -56,6 +58,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace WebApplication1.Extensions
 {
@@ -10,6 +11,22 @@ namespace WebApplication1.Extensions
 
             services.AddSwaggerGen(c =>
             {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "My API",
+                    Version = "v1",
+                    Description = "A comprehensive REST API for managing products and orders",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "GBG Academy",
+                        Email = "api@gbg.com"
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
